@@ -1,13 +1,14 @@
 // require('dotenv').config({path: './env'})
-import dotenv, { config } from "dotenv";
+import dotenv, {config} from "dotenv";
 import connectDB from "./db/index.js";
+import {app} from "./app.js"
 
 dotenv.config({ path: "./env" });
 
 
 connectDB()
 .then(() => {
-    console.log("MongoDB Connected!! DB HOST: ", process.env.MONGODB_URI);
+    console.log("MongoDB Connected!! DataBase HOST: ", process.env.MONGODB_URI);
     app.on("error", (error) => {
         console.error("ERROR: ", error);
         throw error
