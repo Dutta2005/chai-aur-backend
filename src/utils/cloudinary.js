@@ -33,4 +33,4 @@ import fs from "fs"
     }
     
 
-    export default uploadOnCloudinary
+export {uploadOnCloudinary}
