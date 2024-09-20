@@ -9,7 +9,7 @@ import fs from "fs"
         api_secret: process.env.CLOUDINARY_API_SECRET 
     });
     
-
+ 
 
     const uploadOnCloudinary = async (localFilePath) => {
 
@@ -32,6 +32,17 @@ import fs from "fs"
             return null;
         }
     }
+
+    const deleteOnCloudinary = async (localFilePath) => {
+        try{
+            if (!localFilePath) return null; 
+            //delete the file on cloudinary
+           const response =  await cloudinary.uploader.destroy(localFilePath)
+           return response;
+        } catch(error){
+            return null;
+        }
+    }
     
 
-export {uploadOnCloudinary}
+export {uploadOnCloudinary, deleteOnCloudinary}
