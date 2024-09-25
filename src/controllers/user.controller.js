@@ -4,6 +4,16 @@ import { User } from "../models/user.model.js"
 import {uploadOnCloudinary, deleteOnCloudinary} from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken"
+import mongoose from "mongoose";
+
+const generateAccessToken = async(userId) => {
+    try{
+        const user = await User.findById(userId)
+        return user.generateAccessToken()
+    } catch(error) {
+        throw new ApiError(500, "Something went wrong while genrating access token")
+    }
+}
 
 const generateAccessAndRefreshToken = async(userId) => {
     try{
@@ -111,7 +121,7 @@ const logInUser = asyncHandler(async (req, res) => {
 
     const { username, email, password } = req.body
     console.log(email)
-    if (!username && !email) {
+    if (!(username || email)) {
         throw new ApiError(400, "Username or email is required")
     }
 
@@ -159,8 +169,8 @@ const logOutUser = asyncHandler(async (req, res) => {
     // remove cookie
     // send response
     await User.findByIdAndUpdate(req.user._id, {
-        $set: {
-            refreshToken: undefined
+        $unset: {
+            refreshToken: 1 // this removes the field from the document
         }
     }, {
         new: true
