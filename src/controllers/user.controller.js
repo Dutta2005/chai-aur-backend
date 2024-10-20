@@ -437,10 +437,14 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 // sub-aggregate pipeline
 
 const getWatchHistory = asyncHandler(async (req, res) => {
+    if (!mongoose.isValidObjectId(req.user?._id)) {
+        throw new ApiError(400, "Invalid user ID");
+    }
+
     const user = await User.aggregate([
         {
             $match: {
-                _id: new mongoose.Types.ObjectId(req.user?._id)
+                _id: new mongoose.ObjectId(req.user._id)
             }
         },
         {
@@ -477,18 +481,17 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                 ]
             }
         }
-    ])
+    ]);
 
     if (!user?.length) {
-        throw new ApiError(404, "User not found")
+        throw new ApiError(404, "User not found");
     }
 
     return res
-    .status(200)
-    .json(
-        new ApiResponse(200, user[0].watchHistory, "User watch history fetched successfully")
-    )
-})
+        .status(200)
+        .json(new ApiResponse(200, user[0].watchHistory, "User watch history fetched successfully"));
+});
+
 
 export { registerUser, 
          logInUser,
