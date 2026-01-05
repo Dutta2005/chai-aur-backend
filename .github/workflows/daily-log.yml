@@ -2,8 +2,11 @@ name: Daily Progress Log
 
 on:
   schedule:
-    - cron: "30 3 * * *" # runs daily at 09:00 IST (UTC+5:30)
-  workflow_dispatch: # allow manual run
+    - cron: "30 3 * * *" # 09:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   log:
@@ -12,8 +15,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
