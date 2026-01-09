@@ -1,3 +1,4 @@
+// daily-log.js
 import fs from "fs";
 
 const today = new Date().toISOString().split("T")[0];
