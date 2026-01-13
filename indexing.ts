@@ -78,3 +78,44 @@ Below the line: 7/6 * 2 (Red) + 1/6 (Blue) = 15/6 = 2.5.
 Above the line: 5/6 * 2 (Red) + 5/6 (Blue) = 15/6 = 2.5.
 Since the areas above and below the line are equal, the output is 7/6 = 1.16667.
 **/
+var separateSquares = function(squares) {
+    let totalArea = 0;
+    let minY = Infinity, maxY = -Infinity;
+
+    for (const [x, y, l] of squares) {
+        totalArea += l * l;
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y + l);
+    }
+
+    const half = totalArea / 2;
+
+    function areaBelow(h) {
+        let area = 0;
+        for (const [x, y, l] of squares) {
+            const bottom = y;
+            const top = y + l;
+
+            if (h <= bottom) continue;
+            if (h >= top) {
+                area += l * l;
+            } else {
+                area += l * (h - bottom);
+            }
+        }
+        return area;
+    }
+
+    let left = minY, right = maxY;
+
+    for (let i = 0; i < 80; i++) {
+        const mid = (left + right) / 2;
+        if (areaBelow(mid) < half) {
+            left = mid;
+        } else {
+            right = mid;
+        }
+    }
+
+    return left;
+};
