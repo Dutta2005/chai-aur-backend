@@ -150,3 +150,24 @@ Constraints:
 All values in hBars are distinct.
 All values in vBars are distinct.
 **/
+/**
+ * @param {number} n
+ * @param {number} m
+ * @param {number[]} hBars
+ * @param {number[]} vBars
+ * @return {number}
+ */
+var maximizeSquareHoleArea = function(n, m, hBars, vBars) {
+    function findLen(bars) {
+        bars.sort((a, b) => a - b);
+        const bz = bars.length;
+        let len = 1, maxLen = 1;
+        for (let i = 0; i < bz - 1; i++) {
+            if (bars[i] + 1 === bars[i + 1]) len++;
+            maxLen = Math.max(len, maxLen);
+        }
+        return maxLen;
+    }
+    const l = 1 + Math.min(findLen(hBars), findLen(vBars));
+    return l * l;
+};
